@@ -1,13 +1,18 @@
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import AddPatient from './pages/AddPatient';
+import './App.css';
 
 function App() {
     return (
-        <div style={{ padding: '16px' }}>
-            <h1>Ветеринарная клиника</h1>
-            <p>Frontend работает 🚀</p>
-        </div>
-    )
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/head" element={<HomePage />} />
+                <Route path="/add" element={<AddPatient />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
-export default App
-
+export default App;
