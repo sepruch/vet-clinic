@@ -1,0 +1,315 @@
+/* Основная обертка контента (как appointment-content) */
+.med-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+}
+
+/* Заголовок страницы (дублируем, чтобы был идентичен) */
+.page-title {
+    color: #f6f9f4;
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px; /* Чуть опустили */
+    margin-bottom: 20px;
+}
+
+/* ТЕМНЫЙ БЛОК (как appointment-form) */
+.med-cards-box {
+    width: 100%;
+    background-color: #242424;
+    padding: 30px 20px 40px 20px;
+    border-radius: 25px 25px 0 0; /* Закругления только сверху */
+    min-height: 60vh;
+    box-sizing: border-box;
+    flex: 1; /* Растягивается до низа */
+}
+
+/* --- Внутренние элементы --- */
+
+/* Секция поиска */
+.search-section {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto; /* Центрируем форму поиска внутри бокса */
+}
+
+.search-hint {
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.search-input-centered {
+    text-align: center;
+    margin-bottom: 15px;
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.create-new-card-btn {
+    margin-top: 40px;
+    background: #444;
+    color: #fff;
+}
+
+/* Верхняя панель списка */
+.list-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 0 5px;
+}
+
+.owner-label {
+    color: #8db580;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.logout-link {
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+.logout-link:hover { opacity: 0.8; }
+
+.doctor-mode-toggle {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 15px;
+    color: #888;
+    font-size: 12px;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Кнопки и инпуты */
+.doctor-btn {
+    background: #444;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    border: 1px solid #555;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.delete-card-btn {
+    background: transparent;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    padding: 10px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-input {
+    background: #111;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.edit-textarea {
+    background: #111;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.save-pet-btn {
+    background-color: #8db580;
+    color: #1a1a1a;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Карточка питомца */
+.pet-card {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    max-width: 600px; /* Ограничиваем ширину карточек, чтобы на ПК не были гигантскими */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pet-card:hover {
+    border-color: #8db580;
+}
+
+.pet-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: #333;
+}
+
+.pet-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f6f9f4;
+}
+
+.pet-info-short {
+    color: #888;
+    font-size: 14px;
+}
+
+.arrow { transition: transform 0.3s; }
+.arrow.open { transform: rotate(180deg); }
+
+/* Выпадающий контент */
+.pet-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+    background-color: #242424;
+}
+
+.pet-details.open {
+    max-height: 1500px; /* Увеличили, чтобы влезала история */
+    border-top: 1px solid #444;
+}
+
+.details-content { padding: 15px; }
+
+/* Сетка характеристик */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.stat-item span {
+    display: block;
+    font-size: 12px;
+    color: #888;
+}
+
+.stat-item strong { color: #ddd; }
+.stat-item.full-width { grid-column: 1 / -1; }
+
+/* История */
+.history-title {
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.history-item {
+    border-left: 2px solid #8db580;
+    padding-left: 10px;
+    margin-bottom: 15px;
+}
+
+.history-date {
+    font-size: 12px;
+    color: #8db580;
+    margin-bottom: 4px;
+}
+
+.history-doc {
+    font-size: 13px;
+    color: #b0b0b0;
+    font-style: italic;
+}
+
+.history-empty, .history-loading {
+    color: #666;
+    font-style: italic;
+}
+
+/* Кнопки общие */
+.submit-btn {
+    width: 100%;
+    display: block;
+    background-color: #8db580;
+    color: #1a1a1a;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.create-btn-large {
+    background-color: #8db580;
+    color: #1a1a1a;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    max-width: 600px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Формы внутри бокса */
+.appointment-form {
+    /* Если используем класс формы из AddPatient */
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    color: #b0b0b0;
+    font-size: 12px;
+    margin-bottom: 5px;
+    display: block;
+    margin-left: 5px;
+}
+
+/* Фикс для кнопок, чтобы не дергались */
+button:active, button:focus {
+    outline: none;
+    transform: none;
+}
