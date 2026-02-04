@@ -1,0 +1,135 @@
+/* src/pages/Doctors.css */
+
+.doctors-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #1a1a1a; /* Темный фон как везде */
+}
+
+.doctors-content {
+    flex: 1;
+    padding: 20px;
+    padding-bottom: 120px; /* Отступ под футер */
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.page-title {
+    color: #f6f9f4;
+    font-size: 32px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* Карточка врача */
+.doctor-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 60px;
+    /* Анимация появления */
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
+
+/* МАГИЯ ЗМЕЙКИ: Четные карточки переворачиваем зеркально */
+.doctor-card:nth-child(even) {
+    flex-direction: row-reverse;
+    text-align: right; /* Текст тоже выравниваем вправо для красоты */
+}
+
+.doctor-card:nth-child(odd) {
+    flex-direction: row;
+    text-align: left;
+}
+
+/* Фотография */
+.doc-photo-container {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.doc-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Круглая фотка */
+    object-fit: cover;
+    border: 3px solid #8db580; /* Зеленая обводка */
+    box-shadow: 0 4px 20px rgba(141, 181, 128, 0.3);
+    background-color: #333;
+}
+
+/* Информация */
+.doc-info {
+    flex: 1;
+}
+
+.doc-name {
+    font-size: 22px;
+    color: #f6f9f4;
+    margin: 0 0 5px 0;
+}
+
+.doc-specialty {
+    font-size: 16px;
+    color: #8db580; /* Акцентный цвет */
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.doc-exp {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.doc-bio {
+    font-size: 14px;
+    color: #b0b0b0;
+    line-height: 1.5;
+}
+
+/* Кнопка записи к конкретному врачу */
+.doc-action-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 20px;
+    background-color: #333;
+    border: 1px solid #8db580;
+    color: #f6f9f4;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.doc-action-btn:hover {
+    background-color: #8db580;
+    color: #1a1a1a;
+}
+
+/* Адаптив для телефонов */
+@media (max-width: 600px) {
+    .doctor-card,
+    .doctor-card:nth-child(even) {
+        flex-direction: column; /* На телефоне все в колонку */
+        text-align: center;
+        gap: 15px;
+    }
+
+    .doc-photo {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}

@@ -18,7 +18,7 @@ function Footer() {
             </NavLink>
 
             <NavLink to="/appointment" className="nav-item">
-                <img src={doctor} alt="Запись на прием" className={'icons'} />
+                <img src={doctor} alt="Врачи" className={'icons'} />
                 <span>Врачи</span>
             </NavLink>
 
