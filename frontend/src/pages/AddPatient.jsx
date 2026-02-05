@@ -3,29 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import Header from "../components/Header.jsx";
 import '../index.css';
 import './AddPatient.css';
-
-// Импортируем наши новые модули
 import { formatPhoneNumber, animalTranslations } from '../utils/formHelpers';
 import * as api from '../utils/appointmentService';
 
 function AddPatient() {
     const navigate = useNavigate();
 
-    // UI State
     const [activeTab, setActiveTab] = useState("new");
     const [loadingSlots, setLoadingSlots] = useState(false);
 
-    // Data State
-    const [myPets, setMyPets] = useState([]); // Для списка "Мои питомцы" (если нашли)
+    const [myPets, setMyPets] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [availableSlots, setAvailableSlots] = useState([]);
 
-    // Search State
     const [searchPhone, setSearchPhone] = useState('');
     const [isPetsFound, setIsPetsFound] = useState(false);
     const [selectedPetId, setSelectedPetId] = useState("");
 
-    // Form State
     const [formData, setFormData] = useState({
         ownerName: '', phone: '',
         petName: '', petType: 'dog',
@@ -34,20 +28,17 @@ function AddPatient() {
         doctor_id: '', comment: '',
     });
 
-    // 1. Инициализация (Грузим врачей)
     useEffect(() => {
         const loadInit = async () => {
             const { doctors } = await api.fetchInitialData();
             if (doctors) setDoctors(doctors);
 
-            // Проверка LocalStorage
             const savedPhone = localStorage.getItem('userPhone');
             if (savedPhone) setSearchPhone(savedPhone);
         };
         loadInit();
     }, []);
 
-    // 2. Логика слотов времени
     useEffect(() => {
         if (!formData.date || !formData.doctor_id) {
             setAvailableSlots([]);
@@ -58,7 +49,7 @@ function AddPatient() {
 
     const calculateSlots = async () => {
         setLoadingSlots(true);
-        setFormData(prev => ({ ...prev, time: '' })); // Сброс выбранного времени
+        setFormData(prev => ({ ...prev, time: '' }));
 
         try {
             const busyTimes = await api.getBusySlots(formData.doctor_id, formData.date);
@@ -66,7 +57,6 @@ function AddPatient() {
 
             if (!doctor) return;
 
-            // Генерация списка времени (чистая математика)
             const slots = [];
             const now = new Date();
             const isToday = formData.date === now.toISOString().split('T')[0];
@@ -76,9 +66,7 @@ function AddPatient() {
             for (let hour = doctor.work_start_hour; hour < doctor.work_end_hour; hour++) {
                 for (let min of ["00", "30"]) {
                     const timeString = `${hour}:${min}`;
-                    if (busyTimes.includes(timeString)) continue; // Пропуск занятых
-
-                    // Пропуск прошедшего времени
+                    if (busyTimes.includes(timeString)) continue;
                     if (isToday) {
                         if (hour < currentHour) continue;
                         if (hour === currentHour && parseInt(min) < currentMinute) continue;
@@ -93,8 +81,6 @@ function AddPatient() {
             setLoadingSlots(false);
         }
     };
-
-    // --- Обработчики (Handlers) ---
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -137,7 +123,6 @@ function AddPatient() {
         if (activeTab === "existing" && !selectedPetId) return alert("Выберите питомца!");
 
         try {
-            // Вся сложная логика ушла в api.createAppointment
             await api.createAppointment(formData, activeTab === "new", selectedPetId);
 
             alert("Вы успешно записаны!");
@@ -161,7 +146,6 @@ function AddPatient() {
                 </div>
 
                 <form className="appointment-form" onSubmit={handleSubmit}>
-                    {/* ИМЯ И ТЕЛЕФОН */}
                     <div className="form-group">
                         <label>Ваше имя</label>
                         <input name="ownerName" value={formData.ownerName} onChange={handleInputChange} placeholder="Иван" required />
@@ -172,12 +156,14 @@ function AddPatient() {
                                placeholder="+7 (999) 888-55-33" required maxLength={18}/>
                     </div>
 
-                    {/* ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК */}
                     {activeTab === 'new' ? (
                         <>
-                            <div className="form-group"><label>Кличка</label><input name="petName" value={formData.petName} onChange={handleInputChange} required placeholder="Бобик"/></div>
-                            <div className="form-group"><label>Порода</label><input name="petBreed" value={formData.petBreed} onChange={handleInputChange} placeholder="Овчарка"/></div>
-                            <div className="form-group"><label>Возраст</label><input name="petAge" value={formData.petAge} onChange={handleInputChange} placeholder="5 лет"/></div>
+                            <div className="form-group"><label>Кличка</label><input name="petName" value={formData.petName}
+                                                                                    onChange={handleInputChange} required placeholder="Бобик"/></div>
+                            <div className="form-group"><label>Порода</label><input name="petBreed" value={formData.petBreed}
+                                                                                    onChange={handleInputChange} placeholder="Овчарка"/></div>
+                            <div className="form-group"><label>Возраст</label><input name="petAge" value={formData.petAge}
+                                                                                     onChange={handleInputChange} placeholder="5 лет"/></div>
                             <div className="form-group"><label>Вид</label>
                                 <select name="petType" value={formData.petType} onChange={handleInputChange}>
                                     <option value="dog">Собака</option>
@@ -217,7 +203,6 @@ function AddPatient() {
 
                     <hr className="divider"/>
 
-                    {/* ВРАЧ, ДАТА, ВРЕМЯ */}
                     <div className="form-group">
                         <label>Врач</label>
                         <select name="doctor_id" value={formData.doctor_id} onChange={handleInputChange} required className="doctor-select">
@@ -236,7 +221,8 @@ function AddPatient() {
                     {formData.date && formData.doctor_id && (
                         <div className="time-slots-grid">
                             {!loadingSlots && availableSlots.length > 0 ? availableSlots.map(time => (
-                                <button key={time} type="button" className={`time-btn ${formData.time === time ? 'active' : ''}`} onClick={() => setFormData({ ...formData, time })}>
+                                <button key={time} type="button" className={`time-btn ${formData.time === time ? 'active' : ''}`}
+                                        onClick={() => setFormData({ ...formData, time })}>
                                     {time}
                                 </button>
                             )) : <p className="no-slots">{loadingSlots ? "Загрузка..." : "Нет мест"}</p>}

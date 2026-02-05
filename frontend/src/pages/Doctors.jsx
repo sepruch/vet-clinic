@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header.jsx';
 import { Link } from 'react-router-dom';
-import { supabase } from '../supabaseClient'; // <--- Импортируем Supabase
+import { supabase } from '../supabaseClient';
 import './Doctors.css';
 import house from '../assets/house.jpg';
 import bykov from '../assets/bykov.jpg';
@@ -50,7 +50,6 @@ function Doctors() {
                     <div className="doctors-list">
                         {doctors.map((doc) => (
                             <div key={doc.id} className="doctor-card">
-                                {/* Фото */}
                                 <div className="doc-photo-container">
                                     <img
                                         src={localPhotos[doc.name] || doc.image_url || defaultPhoto}
@@ -58,8 +57,6 @@ function Doctors() {
                                         className="doc-photo"
                                     />
                                 </div>
-
-                                {/* Информация */}
                                 <div className="doc-info">
                                     <h3 className="doc-name">{doc.name}</h3>
                                     <span className="doc-specialty">{doc.specialization}</span>

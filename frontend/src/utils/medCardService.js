@@ -1,17 +1,13 @@
 import { supabase } from "../supabaseClient";
 
-// 1. Поиск всех питомцев владельца по телефону
 export const getPetsByPhone = async (phone) => {
-    // Сначала ищем владельца
     const { data: owner } = await supabase
         .from('owners')
         .select('id, full_name')
         .eq('phone', phone)
         .single();
 
-    if (!owner) return null; // Владельца нет
-
-    // Ищем его питомцев
+    if (!owner) return null;
     const { data: pets } = await supabase
         .from('pets')
         .select('*')
@@ -21,7 +17,6 @@ export const getPetsByPhone = async (phone) => {
     return { owner, pets };
 };
 
-// 2. Получение истории приемов (для "жалюзи")
 export const getPetHistory = async (petId) => {
     const { data: appointments } = await supabase
         .from('appointments')
@@ -39,9 +34,7 @@ export const getPetHistory = async (petId) => {
     return appointments;
 };
 
-// 3. Создание новой карты (Владелец + Питомец)
 export const createMedicalCard = async (ownerPhone, petData) => {
-    // А. Проверяем или создаем владельца
     let ownerId;
 
     const { data: existingOwner } = await supabase
@@ -63,7 +56,6 @@ export const createMedicalCard = async (ownerPhone, petData) => {
         ownerId = newOwner.id;
     }
 
-    // Б. Создаем питомца
     const { error: petError } = await supabase
         .from('pets')
         .insert([{
@@ -82,15 +74,12 @@ export const createMedicalCard = async (ownerPhone, petData) => {
 };
 
 export const deleteMedicalCard = async (petId) => {
-    // Сначала удаляем записи на прием (связанные данные)
     const { error: appError } = await supabase
         .from('appointments')
         .delete()
         .eq('pet_id', petId);
 
     if (appError) throw appError;
-
-    // Потом удаляем самого питомца
     const { error: petError } = await supabase
         .from('pets')
         .delete()
@@ -100,11 +89,10 @@ export const deleteMedicalCard = async (petId) => {
     return true;
 };
 
-// 5. Врач заполняет диагноз
 export const updateDiagnosis = async (appointmentId, diagnosisText) => {
     const { error } = await supabase
         .from('appointments')
-        .update({ diagnosis: diagnosisText, status: 'done' }) // Ставим статус "выполнено"
+        .update({ diagnosis: diagnosisText, status: 'done' })
         .eq('id', appointmentId);
 
     if (error) throw error;
@@ -112,7 +100,6 @@ export const updateDiagnosis = async (appointmentId, diagnosisText) => {
 };
 
 export const updatePetDetails = async (petId, updates) => {
-    // updates - это объект типа { weight: '10kg', age: '5 лет', ... }
     const { error } = await supabase
         .from('pets')
         .update(updates)

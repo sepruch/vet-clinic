@@ -1,14 +1,12 @@
-// src/services/appointmentService.js
 import { supabase } from "../supabaseClient";
 
-// 1. Загрузка справочников
+
 export const fetchInitialData = async () => {
     const { data: pets } = await supabase.from('pets').select('*');
     const { data: doctors } = await supabase.from('doctors').select('*');
     return { pets, doctors };
 };
 
-// 2. Поиск владельца и его питомцев по телефону
 export const findClientByPhone = async (phone) => {
     const { data: owner } = await supabase
         .from('owners')
@@ -26,7 +24,6 @@ export const findClientByPhone = async (phone) => {
     return { owner, pets };
 };
 
-// 3. Получение занятых слотов
 export const getBusySlots = async (doctorId, date) => {
     const startOfDay = `${date}T00:00:00`;
     const endOfDay = `${date}T23:59:59`;
@@ -41,21 +38,15 @@ export const getBusySlots = async (doctorId, date) => {
     return data.map(app => app.date_time.split('T')[1].slice(0, 5));
 };
 
-// 4. ГЛАВНАЯ ФУНКЦИЯ: Создание полной записи (Цепочка)
 export const createAppointment = async (formData, isNewClient, selectedPetId) => {
     let finalPetId = selectedPetId;
-
-    // Сценарий А: Новый клиент (создаем Owner -> Pet)
     if (isNewClient) {
-        // 1. Создаем Владельца
         const { data: owner, error: ownerError } = await supabase
             .from('owners')
             .insert([{ full_name: formData.ownerName, phone: formData.phone }])
             .select().single();
 
         if (ownerError) throw new Error("Ошибка создания владельца: " + ownerError.message);
-
-        // 2. Создаем Питомца
         const { data: pet, error: petError } = await supabase
             .from('pets')
             .insert([{
@@ -71,9 +62,7 @@ export const createAppointment = async (formData, isNewClient, selectedPetId) =>
         finalPetId = pet.id;
     }
 
-    // Сценарий Б: Создаем саму запись (Appointment)
     const finalDateTime = `${formData.date}T${formData.time}:00`;
-
     const { error: appError } = await supabase
         .from('appointments')
         .insert([{
@@ -85,6 +74,5 @@ export const createAppointment = async (formData, isNewClient, selectedPetId) =>
         }]);
 
     if (appError) throw new Error("Ошибка записи на прием: " + appError.message);
-
-    return true; // Успех
+    return true;
 };
