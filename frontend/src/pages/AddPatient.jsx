@@ -141,8 +141,19 @@ function AddPatient() {
                 <h2 className="page-title">Запись на прием</h2>
 
                 <div className="tabs">
-                    <button className={`tab-btn ${activeTab === 'new' ? 'active' : ''}`} onClick={() => setActiveTab('new')}>Новый пациент</button>
-                    <button className={`tab-btn ${activeTab === 'existing' ? 'active' : ''}`} onClick={() => setActiveTab('existing')}>У меня есть карта</button>
+                    <button className={`tab-btn ${activeTab === 'new' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('new')}>Новый пациент</button>
+                    <button
+                        className={`tab-btn ${activeTab === 'existing' ? 'active' : ''}`}
+                        onClick={() => {
+                            setActiveTab('existing');
+                            setSearchPhone('');
+                            setIsPetsFound(false);
+                            setMyPets([]);
+                        }}
+                    >
+                        У меня есть карта
+                    </button>
                 </div>
 
                 <form className="appointment-form" onSubmit={handleSubmit}>
@@ -179,7 +190,7 @@ function AddPatient() {
                                 <div className="search-box">
                                     <div className="search-row">
                                         <input type="tel" value={searchPhone} onChange={(e) =>
-                                            handlePhoneInput(e, true)} placeholder="Номер для поиска" />
+                                            handlePhoneInput(e, true)} placeholder="Номер для поиска"  />
                                         <button type="button" onClick={handleFindClient} className="submit-btn search-btn">Найти</button>
                                     </div>
                                 </div>
